@@ -14,12 +14,12 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters 'armeabi-v7a'
+            abiFilters 'armeabi-v7a', 'x86'
         }
         externalNativeBuild {
             cmake {
                 cppFlags ""
-                abiFilters 'armeabi-v7a'
+                abiFilters 'armeabi-v7a', 'x86'
             }
         }
         sourceSets {

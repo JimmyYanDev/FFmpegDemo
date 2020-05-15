@@ -44,8 +44,9 @@ class AVFormat {
         // 音视频流解封装解码
         void demuxing_decoding(const char* srcfile, const char* audio_output_file, const char* video_output_file);
         int open_codec_context(int *stream_idx, AVCodecContext **dec_ctx, AVFormatContext *fmt_ctx, AVMediaType type);
-        int decode_packet(AVCodecContext *dec, const AVPacket *pkt);
+        int decode_packet(int *got_frame, int cached);
         int output_audio_frame(AVFrame *frame);
+        int get_format_from_sample_fmt(const char **fmt, enum AVSampleFormat sample_fmt);
 };
 
 
