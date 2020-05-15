@@ -6,20 +6,17 @@
 #define FFMPEGDEMO_NATIVE_LIB_H
 #include <jni.h>
 #include <string>
-extern "C" {
-    #include "libavcodec/avcodec.h"
-    #include "libavformat/avformat.h"
-    #include "libavdevice/avdevice.h"
-    #include "libavfilter/avfilter.h"
-    #include "libavutil/avutil.h"
-    #include "libpostproc/postprocess.h"
-    #include "libswresample/swresample.h"
-    #include "libswscale/swscale.h"
-};
+#include "AVFormat.h"
 
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_qmyan_ffmpegdemo_MainActivity_stringFromJNI(
         JNIEnv* env,
         jobject /* this */);
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_qmyan_ffmpegdemo_MainActivity_demuxing_1decoding(JNIEnv *env, jobject thiz, jstring src,
+                                                          jstring audio_output_file,
+                                                          jstring video_output_file);
 #endif //FFMPEGDEMO_NATIVE_LIB_H

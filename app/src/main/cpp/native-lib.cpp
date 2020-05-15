@@ -1,3 +1,4 @@
+#include <main/AVFormat.h>
 #include "main/native-lib.h"
 
 extern "C" JNIEXPORT jstring JNICALL
@@ -29,4 +30,15 @@ Java_com_qmyan_ffmpegdemo_MainActivity_stringFromJNI(
         pAvCodec = pAvCodec->next;
     }
     return env->NewStringUTF(hello.c_str());
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_qmyan_ffmpegdemo_MainActivity_demuxing_1decoding(JNIEnv *env, jobject thiz, jstring src,
+                                                          jstring audio_output_file,
+                                                          jstring video_output_file) {
+    const char *csrc = env->GetStringUTFChars(src, 0);
+    const char *caudio_output_file = env->GetStringUTFChars(audio_output_file, 0);
+    const char *cvideo_output_file = env->GetStringUTFChars(video_output_file, 0);
+    AVFormat().demuxing_decoding(csrc, caudio_output_file, cvideo_output_file);
 }
