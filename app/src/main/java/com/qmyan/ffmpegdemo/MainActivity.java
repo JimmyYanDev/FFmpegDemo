@@ -26,6 +26,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qmyan.ffmpegdemo.utils.FileUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -183,10 +185,18 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 String path;
                 Uri uri = data.getData();
-                Log.d(TAG, "onActivityResult: uri.getPath() " + uri.getPath());
-                path = uri.getPath().replace("/document/raw:", "");
-                mSrcText.setText(path);
-                return;
+                Log.d(TAG, "onActivityResult: Uri -> " + uri.toString());
+                Log.d(TAG, "onActivityResult: Scheme ->  " + uri.getScheme());
+                Log.d(TAG, "onActivityResult: Build.VERSION ? 19 -> " + Build.VERSION.SDK_INT);
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {   // 4.4以后
+                    path = FileUtils.getPath(this, uri);
+                    mSrcText.setText(path);
+                    return;
+                } else {    //4.4 以下下系统调用方法
+                    path = FileUtils.getRealPathFromURI(this, uri);
+                    mSrcText.setText(path);
+                    return;
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
