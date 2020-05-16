@@ -33,12 +33,26 @@ Java_com_qmyan_ffmpegdemo_MainActivity_stringFromJNI(
 }
 
 extern "C"
-JNIEXPORT void JNICALL
+JNIEXPORT jboolean JNICALL
 Java_com_qmyan_ffmpegdemo_MainActivity_demuxing_1decoding(JNIEnv *env, jobject thiz, jstring src,
                                                           jstring audio_output_file,
                                                           jstring video_output_file) {
     const char *csrc = env->GetStringUTFChars(src, 0);
     const char *caudio_output_file = env->GetStringUTFChars(audio_output_file, 0);
     const char *cvideo_output_file = env->GetStringUTFChars(video_output_file, 0);
-    AVFormat().demuxing_decoding(csrc, caudio_output_file, cvideo_output_file);
+    return static_cast<jboolean>(AVFormat().demuxing_decoding(csrc, caudio_output_file,
+                                                              cvideo_output_file));
+}
+
+extern "C" jboolean Java_com_qmyan_ffmpegdemo_MainActivity_remuxing(JNIEnv *env, jobject thiz,
+                                                                         jstring origin_file,
+                                                                         jstring target_file) {
+    const char *inFileName = env->GetStringUTFChars(origin_file, 0);
+    const char *outFileName = env->GetStringUTFChars(target_file, 0);
+
+
+
+
+
+    return 0;
 }

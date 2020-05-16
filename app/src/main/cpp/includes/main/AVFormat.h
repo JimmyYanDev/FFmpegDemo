@@ -22,6 +22,12 @@ extern "C" {
 #include <libavutil/timestamp.h>
 #include <libavformat/avformat.h>
 #include <utils/Log.h>
+
+#include <libavutil/frame.h>
+#include <libavutil/mem.h>
+#include <libavcodec/avcodec.h>
+#define AUDIO_INBUF_SIZE 20480
+#define AUDIO_REFILL_THRESH 4096
 };
 
 class AVFormat {
@@ -42,7 +48,7 @@ class AVFormat {
         // 音视频流封装
         void muxing();
         // 音视频流解封装解码
-        void demuxing_decoding(const char* srcfile, const char* audio_output_file, const char* video_output_file);
+        bool demuxing_decoding(const char* srcfile, const char* audio_output_file, const char* video_output_file);
         int open_codec_context(int *stream_idx, AVCodecContext **dec_ctx, AVFormatContext *fmt_ctx, AVMediaType type);
         int decode_packet(int *got_frame, int cached);
         int output_audio_frame(AVFrame *frame);

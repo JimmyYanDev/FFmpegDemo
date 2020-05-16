@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,11 +45,20 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText mSrcText;
     private TextView tv;
+    private Button btnPlay;
+    private Button btnStop;
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             if (msg.what == 0x123) {
-                tv.append("Demuxing and decoding completed!\nAnd you can start to play!");
+                if ((boolean) msg.obj) {
+                    tv.append("Demuxing and decoding completed!\nAnd you can start to play!");
+                    setBtnsState(true);
+                } else {
+                    tv.append("Demuxing and decoding failed!\nPlease look for the log!");
+                    setBtnsState(false);
+                }
             }
             super.handleMessage(msg);
         }
@@ -69,9 +79,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Example of a call to a native method
         mSrcText = findViewById(R.id.src_text);
+        btnPlay = findViewById(R.id.play);
+        btnStop = findViewById(R.id.stop);
+        setBtnsState(false);
         tv = findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
 //        tv.setText("Hello World");
+    }
+
+    private void setBtnsState(boolean flag) {
+        btnPlay.setEnabled(flag);
+        btnStop.setEnabled(flag);
     }
 
     @Override
@@ -104,7 +122,8 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
-    public native void demuxing_decoding(String src, String audioOutputFile, String videoOutputFile);
+    public native boolean remuxing(String originFile, String targetFile);
+    public native boolean demuxing_decoding(String src, String audioOutputFile, String videoOutputFile);
 
     public void stopPlayMusic(View view) {
         stopPlay();
@@ -158,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void demuxingAnddecode(View view) {
         stopPlay();
+        setBtnsState(false);
         tv.setText("Demuxing and decoding......\nPlease wait!\n");
         new Thread(new Runnable() {
             @Override
@@ -171,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
                         + File.separator + "Download" + File.separator + "out.pcm";
                 Log.d(TAG, "src->" + src);
                 Log.d(TAG, "audiofilepath->" + audiofilepath);
-                demuxing_decoding(src, audiofilepath, "");
                 Message message = mHandler.obtainMessage();
+                message.obj = demuxing_decoding(src, audiofilepath, "");
                 message.what = 0x123;
                 mHandler.sendMessage(message);
             }

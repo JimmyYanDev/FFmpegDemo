@@ -15,8 +15,13 @@ Java_com_qmyan_ffmpegdemo_MainActivity_stringFromJNI(
         jobject /* this */);
 
 extern "C"
-JNIEXPORT void JNICALL
+JNIEXPORT jboolean JNICALL
 Java_com_qmyan_ffmpegdemo_MainActivity_demuxing_1decoding(JNIEnv *env, jobject thiz, jstring src,
                                                           jstring audio_output_file,
                                                           jstring video_output_file);
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_qmyan_ffmpegdemo_MainActivity_remuxing(JNIEnv *env, jobject thiz, jstring origin_file,
+                                                     jstring target_file);
 #endif //FFMPEGDEMO_NATIVE_LIB_H
