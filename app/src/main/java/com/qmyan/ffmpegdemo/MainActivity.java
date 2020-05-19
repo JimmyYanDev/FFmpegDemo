@@ -67,6 +67,14 @@ public class MainActivity extends AppCompatActivity {
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
+        System.loadLibrary("avcodec-57");
+        System.loadLibrary("avdevice-57");
+        System.loadLibrary("avfilter-6");
+        System.loadLibrary("avformat-57");
+        System.loadLibrary("avutil-55");
+        System.loadLibrary("postproc-54");
+        System.loadLibrary("swresample-2");
+        System.loadLibrary("swscale-4");
     }
 
     private boolean isPlaying = false;
@@ -83,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         btnStop = findViewById(R.id.stop);
         setBtnsState(false);
         tv = findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
-//        tv.setText("Hello World");
+//        tv.setText(stringFromJNI());
+        tv.setText("Hello World");
     }
 
     private void setBtnsState(boolean flag) {
@@ -189,10 +197,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 String audiofilepath = Environment.getExternalStorageDirectory().getAbsolutePath()
                         + File.separator + "Download" + File.separator + "out.pcm";
+                String videofilepath = Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator + "Download" + File.separator + "out.yuv";
                 Log.d(TAG, "src->" + src);
                 Log.d(TAG, "audiofilepath->" + audiofilepath);
                 Message message = mHandler.obtainMessage();
-                message.obj = demuxing_decoding(src, audiofilepath, "");
+                message.obj = demuxing_decoding(src, audiofilepath, videofilepath);
                 message.what = 0x123;
                 mHandler.sendMessage(message);
             }

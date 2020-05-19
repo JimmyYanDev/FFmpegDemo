@@ -6,7 +6,17 @@
 #define FFMPEGDEMO_NATIVE_LIB_H
 #include <jni.h>
 #include <string>
-#include "AVFormat.h"
+
+extern "C" {
+#include <libavutil/imgutils.h>
+#include <libavutil/samplefmt.h>
+#include <libavutil/timestamp.h>
+#include <libavformat/avformat.h>
+#include <utils/Log.h>
+#include <libavutil/frame.h>
+#include <libavutil/mem.h>
+#include <libavcodec/avcodec.h>
+};
 
 
 extern "C" JNIEXPORT jstring JNICALL
